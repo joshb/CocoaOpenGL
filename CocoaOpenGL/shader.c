@@ -29,6 +29,8 @@
 #include <OpenGL/gl.h>
 #include <OpenGL/glext.h>
 
+void shaderAttachFromFile(GLuint program, GLenum type, const char *filePath);
+
 /*
  * Returns a string containing the text in
  * a vertex/fragment shader source file.

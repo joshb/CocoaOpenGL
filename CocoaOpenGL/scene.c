@@ -34,6 +34,10 @@
 /* shader functions defined in shader.c */
 extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 
+void sceneInit(void);
+void sceneRender(void);
+void sceneCycle(void);
+
 static GLuint g_program;
 static GLuint g_programCameraPositionLocation;
 static GLuint g_programLightPositionLocation;
@@ -97,8 +101,6 @@ createCylinder(unsigned int divisions)
 	glVertexPointer(3, GL_FLOAT, sizeof(float) * floatsPerVertex, 0);
 	glNormalPointer(GL_FLOAT, sizeof(float) * floatsPerVertex, (const GLvoid *)(sizeof(float) * 3));
 }
-
-void sceneCycle(void);
 
 const char *resourcePath;
 
