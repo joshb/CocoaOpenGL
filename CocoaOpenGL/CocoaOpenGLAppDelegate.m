@@ -41,10 +41,6 @@ extern const char *resourcePath;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-	// set the resourcePath string so that the shaders
-	// can be loaded from the application bundle
-	resourcePath = [[[NSBundle mainBundle] resourcePath] UTF8String];
-	
 	// do some GL setup
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClearDepth(1.0f);
@@ -56,7 +52,7 @@ extern const char *resourcePath;
 	glCullFace(GL_BACK);
 	
 	// initialize the scene
-	sceneInit();
+	scene = [[Scene alloc] init];
 	
 	// create timer to render the scene at 60fps
     timer = [NSTimer timerWithTimeInterval: (1.0f / 60.0f)
@@ -65,6 +61,12 @@ extern const char *resourcePath;
 		userInfo: nil
 		repeats: YES];
 	[[NSRunLoop currentRunLoop] addTimer: timer forMode: NSDefaultRunLoopMode];
+}
+
+- (void)applicationWillTerminate:(NSNotification *)notification
+{
+	[timer release];
+	[scene release];
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
@@ -76,11 +78,11 @@ extern const char *resourcePath;
 {
 	// render the scene
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	sceneRender();
+	[scene render];
 	glFlush();
 	
 	// cycle the scene
-	sceneCycle();
+	[scene cycle];
 }
 
 @end

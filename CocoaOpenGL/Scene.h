@@ -23,18 +23,32 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <Cocoa/Cocoa.h>
-#import "Scene.h"
+#import <Foundation/Foundation.h>
+#import <OpenGL/gl.h>
 
-@interface CocoaOpenGLAppDelegate : NSObject <NSApplicationDelegate> {
-	NSWindow *window;
-	NSTimer *timer;
-	Scene *scene;
+#define NUM_LIGHTS 3
+
+@interface Scene : NSObject
+{
+	GLuint m_program;
+	GLuint m_programCameraPositionLocation;
+	GLuint m_programLightPositionLocation;
+	GLuint m_programLightColorLocation;
+
+	GLuint m_cylinderBufferId;
+	unsigned int m_cylinderNumVertices;
+
+	float m_cameraPosition[3];
+
+	float m_lightPosition[NUM_LIGHTS * 3];
+	float m_lightColor[NUM_LIGHTS * 3];
+	float m_lightRotation;
 }
 
-@property (assign) IBOutlet NSWindow *window;
-
-- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender;
-- (void)timerFireMethod:(NSTimer *)theTimer;
+- (void)sceneInit;
+- (void)createCylinder:(unsigned int)divisions;
+- (void)attachShaderToProgram:(GLuint)program withType:(GLenum)type fromFile:(NSString *)filePath;
+- (void)render;
+- (void)cycle;
 
 @end
