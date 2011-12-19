@@ -19,7 +19,6 @@
 		0D2D25A6149A7F5F00655F4F /* shader.fp in Resources */ = {isa = PBXBuildFile; fileRef = 0D2D25A4149A7F5F00655F4F /* shader.fp */; };
 		0D2D25A7149A7F5F00655F4F /* shader.vp in Resources */ = {isa = PBXBuildFile; fileRef = 0D2D25A5149A7F5F00655F4F /* shader.vp */; };
 		0D2D25AA149A83CF00655F4F /* MyNSOpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D2D25A9149A83CF00655F4F /* MyNSOpenGLView.m */; };
-		0D2D25AD149A92B700655F4F /* MyNSWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D2D25AC149A92B700655F4F /* MyNSWindow.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,8 +42,6 @@
 		0D2D25A5149A7F5F00655F4F /* shader.vp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = shader.vp; sourceTree = "<group>"; };
 		0D2D25A8149A83CF00655F4F /* MyNSOpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyNSOpenGLView.h; sourceTree = "<group>"; };
 		0D2D25A9149A83CF00655F4F /* MyNSOpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyNSOpenGLView.m; sourceTree = "<group>"; };
-		0D2D25AB149A92B700655F4F /* MyNSWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyNSWindow.h; sourceTree = "<group>"; };
-		0D2D25AC149A92B700655F4F /* MyNSWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyNSWindow.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,8 +103,6 @@
 				0D2D2588149A788F00655F4F /* Supporting Files */,
 				0D2D25A8149A83CF00655F4F /* MyNSOpenGLView.h */,
 				0D2D25A9149A83CF00655F4F /* MyNSOpenGLView.m */,
-				0D2D25AB149A92B700655F4F /* MyNSWindow.h */,
-				0D2D25AC149A92B700655F4F /* MyNSWindow.m */,
 			);
 			path = CocoaOpenGL;
 			sourceTree = "<group>";
@@ -195,7 +190,6 @@
 				0D2D25A1149A7D6100655F4F /* scene.c in Sources */,
 				0D2D25A3149A7E1F00655F4F /* shader.c in Sources */,
 				0D2D25AA149A83CF00655F4F /* MyNSOpenGLView.m in Sources */,
-				0D2D25AD149A92B700655F4F /* MyNSWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,6 +309,7 @@
 				0D2D259D149A788F00655F4F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

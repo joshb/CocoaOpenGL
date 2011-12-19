@@ -27,6 +27,4 @@
 
 @interface MyNSOpenGLView : NSOpenGLView
 
-- (void)reshape;
-
 @end

@@ -73,4 +73,20 @@ setPerspective(float fov, float aspect, float near, float far)
 	glMatrixMode(GL_MODELVIEW);
 }
 
+- (BOOL)acceptsFirstResponder
+{
+	return YES;
+}
+
+- (void)keyDown:(NSEvent *)theEvent
+{
+	switch([theEvent keyCode]) {
+		default:
+			break;
+		case 0x35: // escape
+			[[self window] close];
+			break;
+	}
+}
+
 @end
