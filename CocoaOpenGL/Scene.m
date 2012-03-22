@@ -45,14 +45,18 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 - (void)dealloc
 {
 	glDeleteProgram(m_program);
-	glDeleteBuffers(4, m_cylinderBufferIds);
+	glDeleteBuffers(5, m_cylinderBufferIds);
 	glDeleteVertexArrays(1, &m_vertexArrayId);
+	[m_normalmap dealloc];
 	[super dealloc];
 }
 
 - (void)sceneInit
 {
 	GLint result;
+	
+	/* load normalmap texture */
+	m_normalmap = [[Texture alloc] initFromFile:@"normalmap.png"];
 
 	/* create program object and attach shaders */
 	m_program = glCreateProgram();
@@ -89,8 +93,9 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 
 	/* get attribute locations */
 	m_programVertexPositionLocation = glGetAttribLocation(m_program, "vertexPosition");
+	m_programVertexTexCoordsLocation = glGetAttribLocation(m_program, "vertexTexCoords");
 	m_programVertexTangentLocation = glGetAttribLocation(m_program, "vertexTangent");
-	m_programVertexBitangentLocation = glGetAttribLocation(m_program, "vertexBiangent");
+	m_programVertexBitangentLocation = glGetAttribLocation(m_program, "vertexBitangent");
 	m_programVertexNormalLocation = glGetAttribLocation(m_program, "vertexNormal");
 
 	/* set up red/green/blue lights */
@@ -113,14 +118,16 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 
 - (void)createCylinder:(unsigned int)divisions
 {
-	unsigned int i, size;
-	float *p, *t, *b, *n;
+	unsigned int i, size, tcSize;
+	float *p, *tc, *t, *b, *n;
 
 	m_cylinderNumVertices = (divisions + 1) * 2;
 	size = m_cylinderNumVertices * 3;
+	tcSize = m_cylinderNumVertices * 2;
 
 	/* generate vertex data */
 	p = malloc(sizeof(float) * size);
+	tc = malloc(sizeof(float) * tcSize);
 	t = malloc(sizeof(float) * size);
 	b = malloc(sizeof(float) * size);
 	n = malloc(sizeof(float) * size);
@@ -134,6 +141,7 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 		float s2 = sinf(r2);
 		
 		unsigned int j = i * 6;
+		unsigned int k = i * 4;
 
 		/* vertex positions */
 		p[j+0] = c1;
@@ -142,6 +150,12 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 		p[j+3] = c1;
 		p[j+4] = -1.0f;
 		p[j+5] = -s1;
+		
+		/* vertex texture coordinates */
+		tc[k+0] = 1.0f / (float)divisions * (float)i * 3.0f;
+		tc[k+1] = 0.0f;
+		tc[k+2] = tc[k+0];
+		tc[k+3] = 1.0f;
 		
 		/* vertex tangents */
 		t[j+0] = c2;
@@ -173,7 +187,7 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 	glBindVertexArray(m_vertexArrayId);
 	
 	/* create buffers */
-	glGenBuffers(4, m_cylinderBufferIds);
+	glGenBuffers(5, m_cylinderBufferIds);
 
 	/* create position buffer */
 	glBindBuffer(GL_ARRAY_BUFFER, m_cylinderBufferIds[0]);
@@ -183,9 +197,18 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 	/* create position attribute array */
 	glEnableVertexAttribArray(m_programVertexPositionLocation);
 	glVertexAttribPointer(m_programVertexPositionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	
+	/* create texture coordinates buffer */
+	glBindBuffer(GL_ARRAY_BUFFER, m_cylinderBufferIds[1]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * tcSize, tc, GL_STATIC_DRAW);
+	free(tc);
+	
+	/* create texture coordinates attribute array */
+	glEnableVertexAttribArray(m_programVertexTexCoordsLocation);
+	glVertexAttribPointer(m_programVertexTexCoordsLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
 	/* create tangent buffer */
-	glBindBuffer(GL_ARRAY_BUFFER, m_cylinderBufferIds[1]);
+	glBindBuffer(GL_ARRAY_BUFFER, m_cylinderBufferIds[2]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * size, t, GL_STATIC_DRAW);
 	free(t);
 
@@ -194,7 +217,7 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 	glVertexAttribPointer(m_programVertexTangentLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	
 	/* create bitangent buffer */
-	glBindBuffer(GL_ARRAY_BUFFER, m_cylinderBufferIds[2]);
+	glBindBuffer(GL_ARRAY_BUFFER, m_cylinderBufferIds[3]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * size, b, GL_STATIC_DRAW);
 	free(b);
 
@@ -203,7 +226,7 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 	glVertexAttribPointer(m_programVertexBitangentLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	
 	/* create normal buffer */
-	glBindBuffer(GL_ARRAY_BUFFER, m_cylinderBufferIds[3]);
+	glBindBuffer(GL_ARRAY_BUFFER, m_cylinderBufferIds[4]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * size, n, GL_STATIC_DRAW);
 	free(n);
 
@@ -212,9 +235,11 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 	glVertexAttribPointer(m_programVertexNormalLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
-- (void)attachShaderToProgram:(GLuint)program withType:(GLenum)type fromFile:(NSString *)filePath
+- (void)attachShaderToProgram:(GLuint)program withType:(GLenum)type
+	fromFile:(NSString *)filePath
 {
-	NSString *fullPath = [[[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/"] stringByAppendingString:filePath];
+	NSString *fullPath = [[[[NSBundle mainBundle] resourcePath]
+		stringByAppendingString:@"/"] stringByAppendingString:filePath];
 	shaderAttachFromFile(program, type, [fullPath UTF8String]);
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2012 Josh A. Beam
+ * Copyright (C) 2012 Josh A. Beam
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -24,42 +24,17 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "Texture.h"
 
-#define NUM_LIGHTS 3
-
-@interface Scene : NSObject
+@interface Texture : NSObject
 {
-	Texture *m_normalmap;
-
-	GLuint m_program;
-	GLint m_programProjectionMatrixLocation;
-	GLint m_programModelviewMatrixLocation;
-	GLint m_programCameraPositionLocation;
-	GLint m_programLightPositionLocation;
-	GLint m_programLightColorLocation;
-	GLint m_programVertexPositionLocation;
-	GLint m_programVertexTexCoordsLocation;
-	GLint m_programVertexTangentLocation;
-	GLint m_programVertexBitangentLocation;
-	GLint m_programVertexNormalLocation;
-	GLint m_programFragmentColorLocation;
-
-	GLuint m_vertexArrayId;
-	GLuint m_cylinderBufferIds[5];
-	unsigned int m_cylinderNumVertices;
-
-	GLfloat m_cameraPosition[3];
-	
-	float m_lightPosition[NUM_LIGHTS * 3];
-	float m_lightColor[NUM_LIGHTS * 3];
-	float m_lightRotation;
+	GLuint m_textureId;
+	unsigned int m_width;
+	unsigned int m_height;
 }
 
-- (void)sceneInit;
-- (void)createCylinder:(unsigned int)divisions;
-- (void)attachShaderToProgram:(GLuint)program withType:(GLenum)type fromFile:(NSString *)filePath;
-- (void)render:(const float *)projectionMatrix;
-- (void)cycle;
+- (id)initFromFile:(NSString *)filePath;
+- (GLuint)textureId;
+- (unsigned int)width;
+- (unsigned int)height;
 
 @end

@@ -26,8 +26,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <OpenGL/gl.h>
-#include <OpenGL/glext.h>
+#include <OpenGL/gl3ext.h>
 
 void shaderAttachFromFile(GLuint program, GLenum type, const char *filePath);
 
