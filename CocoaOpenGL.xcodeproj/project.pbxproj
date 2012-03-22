@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D16967F151BDE1900015978 /* normalmap.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D16967E151BDE1900015978 /* normalmap.png */; };
 		0D2D2582149A788F00655F4F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D2D2581149A788F00655F4F /* Cocoa.framework */; };
 		0D2D258C149A788F00655F4F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0D2D258A149A788F00655F4F /* InfoPlist.strings */; };
 		0D2D258E149A788F00655F4F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D2D258D149A788F00655F4F /* main.m */; };
@@ -20,10 +21,10 @@
 		0D2D25AA149A83CF00655F4F /* MyNSOpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D2D25A9149A83CF00655F4F /* MyNSOpenGLView.m */; };
 		0D412973149FA6410036EDC9 /* Scene.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D412972149FA6410036EDC9 /* Scene.m */; };
 		0D514248151B7D48007F9282 /* Texture.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D514247151B7D48007F9282 /* Texture.m */; };
-		0D51424B151B92FD007F9282 /* normalmap.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D51424A151B92FD007F9282 /* normalmap.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0D16967E151BDE1900015978 /* normalmap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = normalmap.png; sourceTree = "<group>"; };
 		0D2D257D149A788F00655F4F /* CocoaOpenGL.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CocoaOpenGL.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D2D2581149A788F00655F4F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		0D2D2584149A788F00655F4F /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -47,7 +48,6 @@
 		0D412972149FA6410036EDC9 /* Scene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Scene.m; sourceTree = "<group>"; };
 		0D514246151B7D48007F9282 /* Texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
 		0D514247151B7D48007F9282 /* Texture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Texture.m; sourceTree = "<group>"; };
-		0D51424A151B92FD007F9282 /* normalmap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = normalmap.png; path = ../../../Desktop/normalmap.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,7 +116,7 @@
 		0D2D2588149A788F00655F4F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				0D51424A151B92FD007F9282 /* normalmap.png */,
+				0D16967E151BDE1900015978 /* normalmap.png */,
 				0D2D25A4149A7F5F00655F4F /* shader.fp */,
 				0D2D25A5149A7F5F00655F4F /* shader.vp */,
 				0D2D25A2149A7E1F00655F4F /* shader.c */,
@@ -188,7 +188,7 @@
 				0D2D2598149A788F00655F4F /* MainMenu.xib in Resources */,
 				0D2D25A6149A7F5F00655F4F /* shader.fp in Resources */,
 				0D2D25A7149A7F5F00655F4F /* shader.vp in Resources */,
-				0D51424B151B92FD007F9282 /* normalmap.png in Resources */,
+				0D16967F151BDE1900015978 /* normalmap.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
