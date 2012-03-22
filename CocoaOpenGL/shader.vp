@@ -23,7 +23,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
  
- #version 150
+#version 150
 
 const int NUM_LIGHTS = 3;
 
@@ -34,18 +34,20 @@ uniform vec3 cameraPosition;
 uniform vec3 lightPosition[NUM_LIGHTS];
 
 in vec3 vertexPosition;
+in vec3 vertexTangent;
+in vec3 vertexBitangent;
 in vec3 vertexNormal;
 
-out vec3 fragmentNormal;
+out mat3 fragmentTBNMatrix;
 out vec3 cameraVector;
 out vec3 lightVector[NUM_LIGHTS];
 
 void
 main()
-{
+{	
 	// set the normal for the fragment shader and
 	// the vector from the vertex to the camera
-	fragmentNormal = vertexNormal;
+	fragmentTBNMatrix = mat3(vertexTangent, vertexBitangent, vertexNormal);
 	cameraVector = cameraPosition - vertexPosition.xyz;
 
 	// set the vectors from the vertex to each light

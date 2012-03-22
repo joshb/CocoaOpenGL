@@ -32,7 +32,7 @@ const float MAX_DIST_SQUARED = MAX_DIST * MAX_DIST;
 
 uniform vec3 lightColor[NUM_LIGHTS];
 
-in vec3 fragmentNormal;
+in mat3 fragmentTBNMatrix;
 in vec3 cameraVector;
 in vec3 lightVector[NUM_LIGHTS];
 
@@ -45,8 +45,8 @@ main()
 	vec3 diffuse = vec3(0.0, 0.0, 0.0);
 	vec3 specular = vec3(0.0, 0.0, 0.0);
 
-	// normalize the fragment normal and camera direction
-	vec3 normal = normalize(fragmentNormal);
+	// get the fragment normal and camera direction
+	vec3 normal = normalize(fragmentTBNMatrix * vec3(0.0, 0.0, 1.0));
 	vec3 cameraDir = normalize(cameraVector);
 
 	// loop through each light

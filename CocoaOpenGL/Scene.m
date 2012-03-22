@@ -45,7 +45,7 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 - (void)dealloc
 {
 	glDeleteProgram(m_program);
-	glDeleteBuffers(2, m_cylinderBufferIds);
+	glDeleteBuffers(4, m_cylinderBufferIds);
 	glDeleteVertexArrays(1, &m_vertexArrayId);
 	[super dealloc];
 }
@@ -89,6 +89,8 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 
 	/* get attribute locations */
 	m_programVertexPositionLocation = glGetAttribLocation(m_program, "vertexPosition");
+	m_programVertexTangentLocation = glGetAttribLocation(m_program, "vertexTangent");
+	m_programVertexBitangentLocation = glGetAttribLocation(m_program, "vertexBiangent");
 	m_programVertexNormalLocation = glGetAttribLocation(m_program, "vertexNormal");
 
 	/* set up red/green/blue lights */
@@ -112,34 +114,58 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 - (void)createCylinder:(unsigned int)divisions
 {
 	unsigned int i, size;
-	float *p;
-	float *n;
+	float *p, *t, *b, *n;
 
 	m_cylinderNumVertices = (divisions + 1) * 2;
 	size = m_cylinderNumVertices * 3;
 
 	/* generate vertex data */
 	p = malloc(sizeof(float) * size);
+	t = malloc(sizeof(float) * size);
+	b = malloc(sizeof(float) * size);
 	n = malloc(sizeof(float) * size);
 	for(i = 0; i <= divisions; ++i) {
-		float r = ((M_PI * 2.0f) / (float)divisions) * (float)i;
+		float r1 = ((M_PI * 2.0f) / (float)divisions) * (float)i;
+		float r2 = r1 + M_PI / 2.0f;
+		
+		float c1 = cosf(r1);
+		float s1 = sinf(r1);
+		float c2 = cosf(r2);
+		float s2 = sinf(r2);
+		
 		unsigned int j = i * 6;
 
 		/* vertex positions */
-		p[j+0] = cosf(r);
+		p[j+0] = c1;
 		p[j+1] = 1.0f;
-		p[j+2] = -sinf(r);
-		p[j+3] = cosf(r);
+		p[j+2] = -s1;
+		p[j+3] = c1;
 		p[j+4] = -1.0f;
-		p[j+5] = -sinf(r);
+		p[j+5] = -s1;
+		
+		/* vertex tangents */
+		t[j+0] = c2;
+		t[j+1] = 0.0f;
+		t[j+2] = -s2;
+		t[j+3] = c2;
+		t[j+4] = 0.0f;
+		t[j+5] = -s2;
+
+		/* vertex bitangents */
+		b[j+0] = 0.0f;
+		b[j+1] = 1.0f;
+		b[j+2] = 0.0f;
+		b[j+3] = 0.0f;
+		b[j+4] = 1.0f;
+		b[j+5] = 0.0f;
 
 		/* vertex normals */
-		n[j+0] = cosf(r);
+		n[j+0] = c1;
 		n[j+1] = 0.0f;
-		n[j+2] = -sinf(r);
-		n[j+3] = cosf(r);
+		n[j+2] = -s1;
+		n[j+3] = c1;
 		n[j+4] = 0.0f;
-		n[j+5] = -sinf(r);
+		n[j+5] = -s1;
 	}
 	
 	/* create vertex array */
@@ -147,7 +173,7 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 	glBindVertexArray(m_vertexArrayId);
 	
 	/* create buffers */
-	glGenBuffers(2, m_cylinderBufferIds);
+	glGenBuffers(4, m_cylinderBufferIds);
 
 	/* create position buffer */
 	glBindBuffer(GL_ARRAY_BUFFER, m_cylinderBufferIds[0]);
@@ -158,8 +184,26 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 	glEnableVertexAttribArray(m_programVertexPositionLocation);
 	glVertexAttribPointer(m_programVertexPositionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-	/* create normal buffer */
+	/* create tangent buffer */
 	glBindBuffer(GL_ARRAY_BUFFER, m_cylinderBufferIds[1]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * size, t, GL_STATIC_DRAW);
+	free(t);
+
+	/* create tangent attribute array */
+	glEnableVertexAttribArray(m_programVertexTangentLocation);
+	glVertexAttribPointer(m_programVertexTangentLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	
+	/* create bitangent buffer */
+	glBindBuffer(GL_ARRAY_BUFFER, m_cylinderBufferIds[2]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * size, b, GL_STATIC_DRAW);
+	free(b);
+
+	/* create bitangent attribute array */
+	glEnableVertexAttribArray(m_programVertexBitangentLocation);
+	glVertexAttribPointer(m_programVertexBitangentLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	
+	/* create normal buffer */
+	glBindBuffer(GL_ARRAY_BUFFER, m_cylinderBufferIds[3]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * size, n, GL_STATIC_DRAW);
 	free(n);
 

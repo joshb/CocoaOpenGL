@@ -37,11 +37,13 @@
 	GLint m_programLightPositionLocation;
 	GLint m_programLightColorLocation;
 	GLint m_programVertexPositionLocation;
+	GLint m_programVertexTangentLocation;
+	GLint m_programVertexBitangentLocation;
 	GLint m_programVertexNormalLocation;
 	GLint m_programFragmentColorLocation;
 
 	GLuint m_vertexArrayId;
-	GLuint m_cylinderBufferIds[2];
+	GLuint m_cylinderBufferIds[4];
 	unsigned int m_cylinderNumVertices;
 	
 	GLfloat m_cameraPosition[3];
