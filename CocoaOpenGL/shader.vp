@@ -58,5 +58,4 @@ main()
 	// output the transformed vertex
 	fragmentTexCoords = vertexTexCoords;
 	gl_Position = (projectionMatrix * modelviewMatrix) * vec4(vertexPosition, 1.0);
-	//gl_Position = (modelviewMatrix * projectionMatrix) * vec4(vertexPosition, 1.0);
 }

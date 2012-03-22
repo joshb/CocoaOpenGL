@@ -71,5 +71,4 @@ main()
 
 	vec4 sample = vec4(1.0, 1.0, 1.0, 1.0);
 	fragmentColor = vec4(clamp(sample.rgb * (diffuse + AMBIENT) + specular, 0.0, 1.0), sample.a);
-	//fragmentColor = texture(normalmap, fragmentTexCoords);
 }
