@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Josh A. Beam
+ * Copyright (C) 2011-2012 Josh A. Beam
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,7 +25,7 @@
 
 #import "CocoaOpenGLAppDelegate.h"
 #import <math.h>
-#import <OpenGL/gl.h>
+#import <OpenGL/gl3.h>
 
 /* scene functions defined in scene.c */
 extern void sceneInit(void);
@@ -38,6 +38,7 @@ extern const char *resourcePath;
 @implementation CocoaOpenGLAppDelegate
 
 @synthesize window;
+@synthesize view;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
@@ -50,7 +51,7 @@ extern const char *resourcePath;
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
-	
+
 	// initialize the scene
 	scene = [[Scene alloc] init];
 	
@@ -65,7 +66,6 @@ extern const char *resourcePath;
 
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
-	[timer release];
 	[scene release];
 }
 
@@ -78,8 +78,9 @@ extern const char *resourcePath;
 {
 	// render the scene
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	[scene render];
+	[scene render:[view getProjectionMatrix]];
 	glFlush();
+	[view flush];
 	
 	// cycle the scene
 	[scene cycle];

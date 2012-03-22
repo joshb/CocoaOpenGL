@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 Josh A. Beam
+ * Copyright (C) 2010-2012 Josh A. Beam
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,6 +22,8 @@
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+ 
+#version 150
 
 const int NUM_LIGHTS = 3;
 const vec3 AMBIENT = vec3(0.1, 0.1, 0.1);
@@ -30,9 +32,11 @@ const float MAX_DIST_SQUARED = MAX_DIST * MAX_DIST;
 
 uniform vec3 lightColor[NUM_LIGHTS];
 
-varying vec3 fragmentNormal;
-varying vec3 cameraVector;
-varying vec3 lightVector[NUM_LIGHTS];
+in vec3 fragmentNormal;
+in vec3 cameraVector;
+in vec3 lightVector[NUM_LIGHTS];
+
+out vec4 fragmentColor;
 
 void
 main()
@@ -64,5 +68,5 @@ main()
 	}
 
 	vec4 sample = vec4(1.0, 1.0, 1.0, 1.0);
-	gl_FragColor = vec4(clamp(sample.rgb * (diffuse + AMBIENT) + specular, 0.0, 1.0), sample.a);
+	fragmentColor = vec4(clamp(sample.rgb * (diffuse + AMBIENT) + specular, 0.0, 1.0), sample.a);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Josh A. Beam
+ * Copyright (C) 2011-2012 Josh A. Beam
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,5 +26,11 @@
 #import <AppKit/AppKit.h>
 
 @interface MyNSOpenGLView : NSOpenGLView
+{
+	float m_projectionMatrix[16];
+}
+
+- (const float *)getProjectionMatrix;
+- (void)flush;
 
 @end

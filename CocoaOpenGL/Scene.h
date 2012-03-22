@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Josh A. Beam
+ * Copyright (C) 2011-2012 Josh A. Beam
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -24,22 +24,28 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <OpenGL/gl.h>
+#import <OpenGL/gl3.h>
 
 #define NUM_LIGHTS 3
 
 @interface Scene : NSObject
 {
 	GLuint m_program;
-	GLuint m_programCameraPositionLocation;
-	GLuint m_programLightPositionLocation;
-	GLuint m_programLightColorLocation;
+	GLint m_programProjectionMatrixLocation;
+	GLint m_programModelviewMatrixLocation;
+	GLint m_programCameraPositionLocation;
+	GLint m_programLightPositionLocation;
+	GLint m_programLightColorLocation;
+	GLint m_programVertexPositionLocation;
+	GLint m_programVertexNormalLocation;
+	GLint m_programFragmentColorLocation;
 
-	GLuint m_cylinderBufferId;
+	GLuint m_vertexArrayId;
+	GLuint m_cylinderBufferIds[2];
 	unsigned int m_cylinderNumVertices;
-
-	float m_cameraPosition[3];
-
+	
+	GLfloat m_cameraPosition[3];
+	
 	float m_lightPosition[NUM_LIGHTS * 3];
 	float m_lightColor[NUM_LIGHTS * 3];
 	float m_lightRotation;
@@ -48,7 +54,7 @@
 - (void)sceneInit;
 - (void)createCylinder:(unsigned int)divisions;
 - (void)attachShaderToProgram:(GLuint)program withType:(GLenum)type fromFile:(NSString *)filePath;
-- (void)render;
+- (void)render:(const float *)projectionMatrix;
 - (void)cycle;
 
 @end

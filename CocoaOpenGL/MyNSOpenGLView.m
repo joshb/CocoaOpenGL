@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Josh A. Beam
+ * Copyright (C) 2011-2012 Josh A. Beam
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -24,13 +24,12 @@
  */
 
 #import "MyNSOpenGLView.h"
-#import <OpenGL/gl.h>
+#import <OpenGL/gl3.h>
 
 static void
-setPerspective(float fov, float aspect, float near, float far)
+setPerspective(float fov, float aspect, float near, float far, float mat[16])
 {
 	float f;
-	float mat[16];
 
 	f = 1.0f / tanf(fov / 2.0f);
 
@@ -53,11 +52,29 @@ setPerspective(float fov, float aspect, float near, float far)
 	mat[13] = 0.0f;
 	mat[14] = (2.0f * far * near) / (near - far);
 	mat[15] = 0.0f;
-
-    glMultMatrixf(mat);
 }
 
 @implementation MyNSOpenGLView
+
+- (void)awakeFromNib
+{
+	NSOpenGLPixelFormatAttribute attr[] = {
+		NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersion3_2Core,
+		NSOpenGLPFAColorSize, 24,
+		NSOpenGLPFAAlphaSize, 8,
+		NSOpenGLPFADoubleBuffer,
+		NSOpenGLPFADepthSize, 32,
+		0
+	};
+
+	NSOpenGLPixelFormat *format = [[NSOpenGLPixelFormat alloc] initWithAttributes:attr];
+	NSOpenGLContext *context = [[NSOpenGLContext alloc] initWithFormat:format shareContext:nil];
+	[format release];
+
+	[self setOpenGLContext:context];
+	[context release];
+	[[self openGLContext] makeCurrentContext];
+}
 
 - (void)reshape
 {
@@ -67,10 +84,7 @@ setPerspective(float fov, float aspect, float near, float far)
 	glViewport(0, 0, (GLsizei)frame.size.width, (GLsizei)frame.size.height);
 	
 	// set projection matrix
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	setPerspective(M_PI / 4.0f, frame.size.width / frame.size.height, 0.1f, 200.0f);
-	glMatrixMode(GL_MODELVIEW);
+	setPerspective((float)M_PI / 4.0f, (float)frame.size.width / (float)frame.size.height, 0.1f, 200.0f, m_projectionMatrix);
 }
 
 - (BOOL)acceptsFirstResponder
@@ -87,6 +101,16 @@ setPerspective(float fov, float aspect, float near, float far)
 			[[self window] close];
 			break;
 	}
+}
+
+- (const float *)getProjectionMatrix
+{
+	return m_projectionMatrix;
+}
+
+- (void)flush
+{
+	[[self openGLContext] flushBuffer];
 }
 
 @end

@@ -37,8 +37,8 @@
 		0D2D2597149A788F00655F4F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		0D2D259E149A78AA00655F4F /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		0D2D25A2149A7E1F00655F4F /* shader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = shader.c; sourceTree = "<group>"; };
-		0D2D25A4149A7F5F00655F4F /* shader.fp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = shader.fp; sourceTree = "<group>"; };
-		0D2D25A5149A7F5F00655F4F /* shader.vp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = shader.vp; sourceTree = "<group>"; };
+		0D2D25A4149A7F5F00655F4F /* shader.fp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = shader.fp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.glsl; };
+		0D2D25A5149A7F5F00655F4F /* shader.vp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = shader.vp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.glsl; };
 		0D2D25A8149A83CF00655F4F /* MyNSOpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyNSOpenGLView.h; sourceTree = "<group>"; };
 		0D2D25A9149A83CF00655F4F /* MyNSOpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyNSOpenGLView.m; sourceTree = "<group>"; };
 		0D412971149FA6410036EDC9 /* Scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scene.h; sourceTree = "<group>"; };
@@ -150,6 +150,9 @@
 /* Begin PBXProject section */
 		0D2D2574149A788F00655F4F /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+			};
 			buildConfigurationList = 0D2D2577149A788F00655F4F /* Build configuration list for PBXProject "CocoaOpenGL" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
