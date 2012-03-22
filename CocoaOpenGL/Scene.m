@@ -47,7 +47,7 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 	glDeleteProgram(m_program);
 	glDeleteBuffers(5, m_cylinderBufferIds);
 	glDeleteVertexArrays(1, &m_vertexArrayId);
-	[m_normalmap dealloc];
+	[m_normalmap release];
 	[super dealloc];
 }
 
