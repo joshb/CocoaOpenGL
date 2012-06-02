@@ -54,7 +54,19 @@ setPerspective(float fov, float aspect, float near, float far, float mat[16])
 	mat[15] = 0.0f;
 }
 
+@interface MyNSOpenGLView()
+{
+	float _projectionMatrix[16];
+}
+
+@end
+
 @implementation MyNSOpenGLView
+
+- (const float *)projectionMatrix
+{
+	return _projectionMatrix;
+}
 
 - (void)awakeFromNib
 {
@@ -67,8 +79,10 @@ setPerspective(float fov, float aspect, float near, float far, float mat[16])
 		0
 	};
 
-	NSOpenGLPixelFormat *format = [[NSOpenGLPixelFormat alloc] initWithAttributes:attr];
-	NSOpenGLContext *context = [[NSOpenGLContext alloc] initWithFormat:format shareContext:nil];
+	NSOpenGLPixelFormat *format = [[NSOpenGLPixelFormat alloc]
+		initWithAttributes:attr];
+	NSOpenGLContext *context = [[NSOpenGLContext alloc] initWithFormat:format
+		shareContext:nil];
 	[format release];
 
 	[self setOpenGLContext:context];
@@ -84,7 +98,9 @@ setPerspective(float fov, float aspect, float near, float far, float mat[16])
 	glViewport(0, 0, (GLsizei)frame.size.width, (GLsizei)frame.size.height);
 	
 	// set projection matrix
-	setPerspective((float)M_PI / 4.0f, (float)frame.size.width / (float)frame.size.height, 0.1f, 200.0f, m_projectionMatrix);
+	setPerspective((float)M_PI / 4.0f,
+		(float)frame.size.width / (float)frame.size.height,
+		0.1f, 200.0f, _projectionMatrix);
 }
 
 - (BOOL)acceptsFirstResponder
@@ -101,11 +117,6 @@ setPerspective(float fov, float aspect, float near, float far, float mat[16])
 			[[self window] close];
 			break;
 	}
-}
-
-- (const float *)getProjectionMatrix
-{
-	return m_projectionMatrix;
 }
 
 - (void)flush

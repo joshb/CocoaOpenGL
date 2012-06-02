@@ -26,11 +26,9 @@
 #import <AppKit/AppKit.h>
 
 @interface MyNSOpenGLView : NSOpenGLView
-{
-	float m_projectionMatrix[16];
-}
 
-- (const float *)getProjectionMatrix;
+@property (readonly) const float *projectionMatrix;
+
 - (void)flush;
 
 @end
