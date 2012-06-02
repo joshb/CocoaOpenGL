@@ -29,37 +29,8 @@
 #define NUM_LIGHTS 3
 
 @interface Scene : NSObject
-{
-	Texture *m_normalmap;
 
-	GLuint m_program;
-	GLint m_programProjectionMatrixLocation;
-	GLint m_programModelviewMatrixLocation;
-	GLint m_programCameraPositionLocation;
-	GLint m_programLightPositionLocation;
-	GLint m_programLightColorLocation;
-	GLint m_programVertexPositionLocation;
-	GLint m_programVertexTexCoordsLocation;
-	GLint m_programVertexTangentLocation;
-	GLint m_programVertexBitangentLocation;
-	GLint m_programVertexNormalLocation;
-	GLint m_programFragmentColorLocation;
-
-	GLuint m_vertexArrayId;
-	GLuint m_cylinderBufferIds[5];
-	unsigned int m_cylinderNumVertices;
-
-	GLfloat m_cameraPosition[3];
-	
-	float m_lightPosition[NUM_LIGHTS * 3];
-	float m_lightColor[NUM_LIGHTS * 3];
-	float m_lightRotation;
-}
-
-- (void)sceneInit;
-- (void)createCylinder:(unsigned int)divisions;
-- (void)attachShaderToProgram:(GLuint)program withType:(GLenum)type fromFile:(NSString *)filePath;
-- (void)render:(const float *)projectionMatrix;
+- (void)renderWithProjectionMatrix:(const float *)projectionMatrix;
 - (void)cycle;
 
 @end

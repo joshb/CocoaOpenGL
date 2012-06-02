@@ -79,7 +79,7 @@
 {
 	// render the scene
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	[_scene render:_view.projectionMatrix];
+	[_scene renderWithProjectionMatrix:_view.projectionMatrix];
 	glFlush();
 	[_view flush];
 	

@@ -30,6 +30,36 @@
 /* shader functions defined in shader.c */
 extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 
+@interface Scene()
+{
+	Texture *_normalmap;
+
+	GLuint _program;
+	GLint _programProjectionMatrixLocation;
+	GLint _programModelviewMatrixLocation;
+	GLint _programCameraPositionLocation;
+	GLint _programLightPositionLocation;
+	GLint _programLightColorLocation;
+	GLint _programVertexPositionLocation;
+	GLint _programVertexTexCoordsLocation;
+	GLint _programVertexTangentLocation;
+	GLint _programVertexBitangentLocation;
+	GLint _programVertexNormalLocation;
+	GLint _programFragmentColorLocation;
+
+	GLuint _vertexArrayId;
+	GLuint _cylinderBufferIds[5];
+	unsigned int _cylinderNumVertices;
+
+	GLfloat _cameraPosition[3];
+	
+	float _lightPosition[NUM_LIGHTS * 3];
+	float _lightColor[NUM_LIGHTS * 3];
+	float _lightRotation;
+}
+
+@end
+
 @implementation Scene
 
 - (id)init
@@ -44,10 +74,10 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 
 - (void)dealloc
 {
-	glDeleteProgram(m_program);
-	glDeleteBuffers(5, m_cylinderBufferIds);
-	glDeleteVertexArrays(1, &m_vertexArrayId);
-	[m_normalmap release];
+	glDeleteProgram(_program);
+	glDeleteBuffers(5, _cylinderBufferIds);
+	glDeleteVertexArrays(1, &_vertexArrayId);
+	[_normalmap release];
 	[super dealloc];
 }
 
@@ -56,64 +86,64 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 	GLint result;
 	
 	/* load normalmap texture */
-	m_normalmap = [[Texture alloc] initFromFile:@"normalmap.png"];
+	_normalmap = [[Texture alloc] initFromFile:@"normalmap.png"];
 
 	/* create program object and attach shaders */
-	m_program = glCreateProgram();
-	[self attachShaderToProgram:m_program withType:GL_VERTEX_SHADER fromFile:@"shader.vp"];
-	[self attachShaderToProgram:m_program withType:GL_FRAGMENT_SHADER fromFile:@"shader.fp"];
+	_program = glCreateProgram();
+	[self attachShaderToProgram:_program withType:GL_VERTEX_SHADER fromFile:@"shader.vp"];
+	[self attachShaderToProgram:_program withType:GL_FRAGMENT_SHADER fromFile:@"shader.fp"];
 
 	/* link the program and make sure that there were no errors */
-	glLinkProgram(m_program);
-	glGetProgramiv(m_program, GL_LINK_STATUS, &result);
+	glLinkProgram(_program);
+	glGetProgramiv(_program, GL_LINK_STATUS, &result);
 	if(result == GL_FALSE) {
 		GLint length;
 		char *log;
 
 		/* get the program info log */
-		glGetProgramiv(m_program, GL_INFO_LOG_LENGTH, &length);
+		glGetProgramiv(_program, GL_INFO_LOG_LENGTH, &length);
 		log = malloc(length);
-		glGetProgramInfoLog(m_program, length, &result, log);
+		glGetProgramInfoLog(_program, length, &result, log);
 
 		/* print an error message and the info log */
 		fprintf(stderr, "sceneInit(): Program linking failed: %s\n", log);
 		free(log);
 
 		/* delete the program */
-		glDeleteProgram(m_program);
-		m_program = 0;
+		glDeleteProgram(_program);
+		_program = 0;
 	}
 
 	/* get uniform locations */
-	m_programProjectionMatrixLocation = glGetUniformLocation(m_program, "projectionMatrix");
-	m_programModelviewMatrixLocation = glGetUniformLocation(m_program, "modelviewMatrix");
-	m_programCameraPositionLocation = glGetUniformLocation(m_program, "cameraPosition");
-	m_programLightPositionLocation = glGetUniformLocation(m_program, "lightPosition");
-	m_programLightColorLocation = glGetUniformLocation(m_program, "lightColor");
+	_programProjectionMatrixLocation = glGetUniformLocation(_program, "projectionMatrix");
+	_programModelviewMatrixLocation = glGetUniformLocation(_program, "modelviewMatrix");
+	_programCameraPositionLocation = glGetUniformLocation(_program, "cameraPosition");
+	_programLightPositionLocation = glGetUniformLocation(_program, "lightPosition");
+	_programLightColorLocation = glGetUniformLocation(_program, "lightColor");
 
 	/* get attribute locations */
-	m_programVertexPositionLocation = glGetAttribLocation(m_program, "vertexPosition");
-	m_programVertexTexCoordsLocation = glGetAttribLocation(m_program, "vertexTexCoords");
-	m_programVertexTangentLocation = glGetAttribLocation(m_program, "vertexTangent");
-	m_programVertexBitangentLocation = glGetAttribLocation(m_program, "vertexBitangent");
-	m_programVertexNormalLocation = glGetAttribLocation(m_program, "vertexNormal");
+	_programVertexPositionLocation = glGetAttribLocation(_program, "vertexPosition");
+	_programVertexTexCoordsLocation = glGetAttribLocation(_program, "vertexTexCoords");
+	_programVertexTangentLocation = glGetAttribLocation(_program, "vertexTangent");
+	_programVertexBitangentLocation = glGetAttribLocation(_program, "vertexBitangent");
+	_programVertexNormalLocation = glGetAttribLocation(_program, "vertexNormal");
 
 	/* set up red/green/blue lights */
-	m_lightColor[0] = 1.0f; m_lightColor[1] = 0.0f; m_lightColor[2] = 0.0f;
-	m_lightColor[3] = 0.0f; m_lightColor[4] = 1.0f; m_lightColor[5] = 0.0f;
-	m_lightColor[6] = 0.0f; m_lightColor[7] = 0.0f; m_lightColor[8] = 1.0f;
+	_lightColor[0] = 1.0f; _lightColor[1] = 0.0f; _lightColor[2] = 0.0f;
+	_lightColor[3] = 0.0f; _lightColor[4] = 1.0f; _lightColor[5] = 0.0f;
+	_lightColor[6] = 0.0f; _lightColor[7] = 0.0f; _lightColor[8] = 1.0f;
 
 	/* create cylinder */
 	[self createCylinder:36];
 
 	/* do the first cycle to initialize positions */
-	m_lightRotation = 0.0f;
+	_lightRotation = 0.0f;
 	[self cycle];
 
 	/* setup camera */
-	m_cameraPosition[0] = 0.0f;
-	m_cameraPosition[1] = 0.0f;
-	m_cameraPosition[2] = 4.0f;
+	_cameraPosition[0] = 0.0f;
+	_cameraPosition[1] = 0.0f;
+	_cameraPosition[2] = 4.0f;
 }
 
 - (void)createCylinder:(unsigned int)divisions
@@ -121,9 +151,9 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 	unsigned int i, size, tcSize;
 	float *p, *tc, *t, *b, *n;
 
-	m_cylinderNumVertices = (divisions + 1) * 2;
-	size = m_cylinderNumVertices * 3;
-	tcSize = m_cylinderNumVertices * 2;
+	_cylinderNumVertices = (divisions + 1) * 2;
+	size = _cylinderNumVertices * 3;
+	tcSize = _cylinderNumVertices * 2;
 
 	/* generate vertex data */
 	p = malloc(sizeof(float) * size);
@@ -183,56 +213,56 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 	}
 	
 	/* create vertex array */
-	glGenVertexArrays(1, &m_vertexArrayId);
-	glBindVertexArray(m_vertexArrayId);
+	glGenVertexArrays(1, &_vertexArrayId);
+	glBindVertexArray(_vertexArrayId);
 	
 	/* create buffers */
-	glGenBuffers(5, m_cylinderBufferIds);
+	glGenBuffers(5, _cylinderBufferIds);
 
 	/* create position buffer */
-	glBindBuffer(GL_ARRAY_BUFFER, m_cylinderBufferIds[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, _cylinderBufferIds[0]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * size, p, GL_STATIC_DRAW);
 	free(p);
 	
 	/* create position attribute array */
-	glEnableVertexAttribArray(m_programVertexPositionLocation);
-	glVertexAttribPointer(m_programVertexPositionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(_programVertexPositionLocation);
+	glVertexAttribPointer(_programVertexPositionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	
 	/* create texture coordinates buffer */
-	glBindBuffer(GL_ARRAY_BUFFER, m_cylinderBufferIds[1]);
+	glBindBuffer(GL_ARRAY_BUFFER, _cylinderBufferIds[1]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * tcSize, tc, GL_STATIC_DRAW);
 	free(tc);
 	
 	/* create texture coordinates attribute array */
-	glEnableVertexAttribArray(m_programVertexTexCoordsLocation);
-	glVertexAttribPointer(m_programVertexTexCoordsLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(_programVertexTexCoordsLocation);
+	glVertexAttribPointer(_programVertexTexCoordsLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
 	/* create tangent buffer */
-	glBindBuffer(GL_ARRAY_BUFFER, m_cylinderBufferIds[2]);
+	glBindBuffer(GL_ARRAY_BUFFER, _cylinderBufferIds[2]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * size, t, GL_STATIC_DRAW);
 	free(t);
 
 	/* create tangent attribute array */
-	glEnableVertexAttribArray(m_programVertexTangentLocation);
-	glVertexAttribPointer(m_programVertexTangentLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(_programVertexTangentLocation);
+	glVertexAttribPointer(_programVertexTangentLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	
 	/* create bitangent buffer */
-	glBindBuffer(GL_ARRAY_BUFFER, m_cylinderBufferIds[3]);
+	glBindBuffer(GL_ARRAY_BUFFER, _cylinderBufferIds[3]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * size, b, GL_STATIC_DRAW);
 	free(b);
 
 	/* create bitangent attribute array */
-	glEnableVertexAttribArray(m_programVertexBitangentLocation);
-	glVertexAttribPointer(m_programVertexBitangentLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(_programVertexBitangentLocation);
+	glVertexAttribPointer(_programVertexBitangentLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	
 	/* create normal buffer */
-	glBindBuffer(GL_ARRAY_BUFFER, m_cylinderBufferIds[4]);
+	glBindBuffer(GL_ARRAY_BUFFER, _cylinderBufferIds[4]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * size, n, GL_STATIC_DRAW);
 	free(n);
 
 	/* create normal attribute array */
-	glEnableVertexAttribArray(m_programVertexNormalLocation);
-	glVertexAttribPointer(m_programVertexNormalLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(_programVertexNormalLocation);
+	glVertexAttribPointer(_programVertexNormalLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
 - (void)attachShaderToProgram:(GLuint)program withType:(GLenum)type
@@ -243,7 +273,7 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 	shaderAttachFromFile(program, type, [fullPath UTF8String]);
 }
 
-- (void)render:(const float *)projectionMatrix
+- (void)renderWithProjectionMatrix:(const float *)projectionMatrix
 {
 	/* create modelview matrix */
 	float modelviewMatrix[16];
@@ -251,20 +281,20 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 		for(int j = 0; j < 4; ++j)
 			modelviewMatrix[i * 4 + j] = (i == j) ? 1.0f : 0.0f;
 	}
-	modelviewMatrix[12] = -m_cameraPosition[0];
-	modelviewMatrix[13] = -m_cameraPosition[1];
-	modelviewMatrix[14] = -m_cameraPosition[2];
+	modelviewMatrix[12] = -_cameraPosition[0];
+	modelviewMatrix[13] = -_cameraPosition[1];
+	modelviewMatrix[14] = -_cameraPosition[2];
 
 	/* enable program and set uniform variables */
-	glUseProgram(m_program);
-	glUniformMatrix4fv(m_programProjectionMatrixLocation, 1, GL_FALSE, projectionMatrix);
-	glUniformMatrix4fv(m_programModelviewMatrixLocation, 1, GL_FALSE, modelviewMatrix);
-	glUniform3fv(m_programCameraPositionLocation, 1, m_cameraPosition);
-	glUniform3fv(m_programLightPositionLocation, NUM_LIGHTS, m_lightPosition);
-	glUniform3fv(m_programLightColorLocation, NUM_LIGHTS, m_lightColor);
+	glUseProgram(_program);
+	glUniformMatrix4fv(_programProjectionMatrixLocation, 1, GL_FALSE, projectionMatrix);
+	glUniformMatrix4fv(_programModelviewMatrixLocation, 1, GL_FALSE, modelviewMatrix);
+	glUniform3fv(_programCameraPositionLocation, 1, _cameraPosition);
+	glUniform3fv(_programLightPositionLocation, NUM_LIGHTS, _lightPosition);
+	glUniform3fv(_programLightColorLocation, NUM_LIGHTS, _lightColor);
 
 	/* render the cylinder */
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, m_cylinderNumVertices);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, _cylinderNumVertices);
 
 	/* disable program */
 	glUseProgram(0);
@@ -296,14 +326,14 @@ getTicks(void)
 	prevTicks = ticks;
 
 	/* update the light positions */
-	m_lightRotation += (M_PI / 4.0f) * secondsElapsed;
+	_lightRotation += (M_PI / 4.0f) * secondsElapsed;
 	for(i = 0; i < NUM_LIGHTS; ++i) {
 		const float radius = 1.75f;
-		float r = (((M_PI * 2.0f) / (float)NUM_LIGHTS) * (float)i) + m_lightRotation;
+		float r = (((M_PI * 2.0f) / (float)NUM_LIGHTS) * (float)i) + _lightRotation;
 
-		m_lightPosition[i * 3 + 0] = cosf(r) * radius;
-		m_lightPosition[i * 3 + 1] = cosf(r) * sinf(r);
-		m_lightPosition[i * 3 + 2] = sinf(r) * radius;
+		_lightPosition[i * 3 + 0] = cosf(r) * radius;
+		_lightPosition[i * 3 + 1] = cosf(r) * sinf(r);
+		_lightPosition[i * 3 + 2] = sinf(r) * radius;
 	}
 }
 
