@@ -24,20 +24,11 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import "Scene.h"
 #import "MyNSOpenGLView.h"
 
-@interface CocoaOpenGLAppDelegate : NSObject <NSApplicationDelegate> {
-	NSWindow *window;
-	MyNSOpenGLView *view;
-	NSTimer *timer;
-	Scene *scene;
-}
+@interface CocoaOpenGLAppDelegate : NSObject <NSApplicationDelegate>
 
 @property (assign) IBOutlet NSWindow *window;
 @property (assign) IBOutlet MyNSOpenGLView *view;
-
-- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender;
-- (void)timerFireMethod:(NSTimer *)theTimer;
 
 @end

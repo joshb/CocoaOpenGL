@@ -23,22 +23,23 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "CocoaOpenGLAppDelegate.h"
 #import <math.h>
 #import <OpenGL/gl3.h>
+#import "CocoaOpenGLAppDelegate.h"
+#import "Scene.h"
 
-/* scene functions defined in scene.c */
-extern void sceneInit(void);
-extern void sceneRender(void);
-extern void sceneCycle(void);
+@interface CocoaOpenGLAppDelegate()
+{
+	NSTimer *_timer;
+	Scene *_scene;
+}
 
-/* resourcePath string declared in scene.c */
-extern const char *resourcePath;
+@end
 
 @implementation CocoaOpenGLAppDelegate
 
-@synthesize window;
-@synthesize view;
+@synthesize window = _window;
+@synthesize view = _view;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
@@ -53,20 +54,20 @@ extern const char *resourcePath;
 	glCullFace(GL_BACK);
 
 	// initialize the scene
-	scene = [[Scene alloc] init];
+	_scene = [[Scene alloc] init];
 	
 	// create timer to render the scene at 60fps
-    timer = [NSTimer timerWithTimeInterval: (1.0f / 60.0f)
-		target: self
-		selector: @selector(timerFireMethod:)
-		userInfo: nil
-		repeats: YES];
-	[[NSRunLoop currentRunLoop] addTimer: timer forMode: NSDefaultRunLoopMode];
+    _timer = [NSTimer timerWithTimeInterval:(1.0f / 60.0f)
+		target:self
+		selector:@selector(timerFireMethod:)
+		userInfo:nil
+		repeats:YES];
+	[[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSDefaultRunLoopMode];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
-	[scene release];
+	[_scene release];
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
@@ -78,12 +79,12 @@ extern const char *resourcePath;
 {
 	// render the scene
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	[scene render:[view getProjectionMatrix]];
+	[_scene render:[_view getProjectionMatrix]];
 	glFlush();
-	[view flush];
+	[_view flush];
 	
 	// cycle the scene
-	[scene cycle];
+	[_scene cycle];
 }
 
 @end
