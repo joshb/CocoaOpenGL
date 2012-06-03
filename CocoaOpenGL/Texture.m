@@ -78,6 +78,10 @@ loadImage(const char *filePath)
 
 @implementation Texture
 
+@synthesize textureId = _textureId;
+@synthesize width = _width;
+@synthesize height = _height;
+
 - (id)initFromFile:(NSString *)filePath
 {
 	if((self = [super init])) {
@@ -107,8 +111,8 @@ loadImage(const char *filePath)
 		}
 		
 		// generate and bind texture
-		glGenTextures(1, &m_textureId);
-		glBindTexture(GL_TEXTURE_2D, m_textureId);
+		glGenTextures(1, &_textureId);
+		glBindTexture(GL_TEXTURE_2D, _textureId);
 
 		// set parameters
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -120,8 +124,8 @@ loadImage(const char *filePath)
 		// create the texture using the image data
 		glTexImage2D(GL_TEXTURE_2D, 0, format, info.width, info.height, 0,
 			format, GL_UNSIGNED_BYTE, (const GLvoid *)info.data);
-		m_width = info.width;
-		m_height = info.height;
+		_width = info.width;
+		_height = info.height;
 
 		free(info.data);
 		return self;
@@ -132,23 +136,8 @@ loadImage(const char *filePath)
 
 - (void)dealloc
 {
-	glDeleteTextures(1, &m_textureId);
+	glDeleteTextures(1, &_textureId);
 	[super dealloc];
-}
-
-- (GLuint)textureId
-{
-	return m_textureId;
-}
-
-- (unsigned int)width
-{
-	return m_width;
-}
-
-- (unsigned int)height
-{
-	return m_height;
 }
 
 @end

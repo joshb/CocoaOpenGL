@@ -26,15 +26,11 @@
 #import <Foundation/Foundation.h>
 
 @interface Texture : NSObject
-{
-	GLuint m_textureId;
-	unsigned int m_width;
-	unsigned int m_height;
-}
+
+@property (readonly) GLuint textureId;
+@property (readonly) unsigned int width;
+@property (readonly) unsigned int height;
 
 - (id)initFromFile:(NSString *)filePath;
-- (GLuint)textureId;
-- (unsigned int)width;
-- (unsigned int)height;
 
 @end
