@@ -92,7 +92,7 @@ setPerspective(float fov, float aspect, float near, float far, float mat[16])
 
 - (void)reshape
 {
-	NSRect frame = [self frame];
+	NSRect frame = self.frame;
 	
 	// set viewport
 	glViewport(0, 0, (GLsizei)frame.size.width, (GLsizei)frame.size.height);
@@ -110,18 +110,18 @@ setPerspective(float fov, float aspect, float near, float far, float mat[16])
 
 - (void)keyDown:(NSEvent *)theEvent
 {
-	switch([theEvent keyCode]) {
+	switch(theEvent.keyCode) {
 		default:
 			break;
 		case 0x35: // escape
-			[[self window] close];
+			[self.window close];
 			break;
 	}
 }
 
 - (void)flush
 {
-	[[self openGLContext] flushBuffer];
+	[self.openGLContext flushBuffer];
 }
 
 @end
