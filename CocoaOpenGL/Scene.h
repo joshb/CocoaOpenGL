@@ -28,9 +28,11 @@
 
 #define NUM_LIGHTS 3
 
+@class Matrix4;
+
 @interface Scene : NSObject
 
-- (void)renderWithProjectionMatrix:(const float *)projectionMatrix;
+- (void)renderWithProjectionMatrix:(Matrix4 *)projectionMatrix;
 - (void)cycle;
 
 @end

@@ -24,46 +24,19 @@
  */
 
 #import "MyNSOpenGLView.h"
+#import "Matrix4.h"
 #import <OpenGL/gl3.h>
-
-static void
-setPerspective(float fov, float aspect, float near, float far, float mat[16])
-{
-	float f;
-
-	f = 1.0f / tanf(fov / 2.0f);
-
-	mat[0] = f / aspect;
-	mat[1] = 0.0f;
-	mat[2] = 0.0f;
-	mat[3] = 0.0f;
-
-	mat[4] = 0.0f;
-	mat[5] = f;
-	mat[6] = 0.0f;
-	mat[7] = 0.0f;
-
-	mat[8] = 0.0f;
-	mat[9] = 0.0f;
-	mat[10] = (far + near) / (near  - far);
-	mat[11] = -1.0f;
-
-	mat[12] = 0.0f;
-	mat[13] = 0.0f;
-	mat[14] = (2.0f * far * near) / (near - far);
-	mat[15] = 0.0f;
-}
 
 @interface MyNSOpenGLView()
 {
-	float _projectionMatrix[16];
+	Matrix4 *_projectionMatrix;
 }
 
 @end
 
 @implementation MyNSOpenGLView
 
-- (const float *)projectionMatrix
+- (Matrix4 *)projectionMatrix
 {
 	return _projectionMatrix;
 }
@@ -97,10 +70,8 @@ setPerspective(float fov, float aspect, float near, float far, float mat[16])
 	// set viewport
 	glViewport(0, 0, (GLsizei)frame.size.width, (GLsizei)frame.size.height);
 	
-	// set projection matrix
-	setPerspective((float)M_PI / 4.0f,
-		(float)frame.size.width / (float)frame.size.height,
-		0.1f, 200.0f, _projectionMatrix);
+    // create projection matrix
+    _projectionMatrix = [[Matrix4 perspectiveMatrixWithFieldOfView:((float)M_PI / 4.0f) aspect:((float)frame.size.width / (float)frame.size.height) near:0.1f far:200.0f] retain];
 }
 
 - (BOOL)acceptsFirstResponder

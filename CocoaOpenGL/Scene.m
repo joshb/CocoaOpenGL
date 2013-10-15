@@ -108,13 +108,13 @@
 	_cameraPosition[2] = 4.0f;
 }
 
-- (void)renderWithProjectionMatrix:(const float *)projectionMatrix
+- (void)renderWithProjectionMatrix:(Matrix4 *)projectionMatrix
 {
     Matrix4 *modelviewMatrix = [Matrix4 translationMatrixWithX:-_cameraPosition[0] y:-_cameraPosition[1] z:-_cameraPosition[2]];
 
 	// enable the program and set uniform variables
 	[_program useProgram];
-	glUniformMatrix4fv(_programProjectionMatrixLocation, 1, GL_FALSE, projectionMatrix);
+	glUniformMatrix4fv(_programProjectionMatrixLocation, 1, GL_FALSE, projectionMatrix.data);
 	glUniformMatrix4fv(_programModelviewMatrixLocation, 1, GL_FALSE, modelviewMatrix.data);
 	glUniform3fv(_programCameraPositionLocation, 1, _cameraPosition);
 	glUniform3fv(_programLightPositionLocation, NUM_LIGHTS, _lightPosition);

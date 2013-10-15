@@ -74,6 +74,21 @@
     }
 }
 
++ (Matrix4 *)perspectiveMatrixWithFieldOfView:(float)fov aspect:(float)aspect near:(float)near far:(float)far
+{
+    Matrix4 *matrix = [[Matrix4 alloc] init];
+    float f = 1.0f / tanf(fov / 2.0f);
+    
+    [matrix setValue:(f / aspect) forIndex:0];
+    [matrix setValue:f forIndex:5];
+    [matrix setValue:((far + near) / (near - far)) forIndex:10];
+    [matrix setValue:-1.0f forIndex:11];
+    [matrix setValue:((2.0f * far * near) / (near - far)) forIndex:14];
+    [matrix setValue:0.0f forIndex:15];
+    
+    return [matrix autorelease];
+}
+
 + (Matrix4 *)translationMatrixWithX:(float)x y:(float)y z:(float)z
 {
     Matrix4 *matrix = [[Matrix4 alloc] init];

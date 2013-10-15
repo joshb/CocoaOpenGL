@@ -31,6 +31,7 @@
 - (float)getValueForIndex:(int)index;
 - (void)setValue:(float)value forIndex:(int)index;
 
++ (Matrix4 *)perspectiveMatrixWithFieldOfView:(float)fov aspect:(float)aspect near:(float)near far:(float)far;
 + (Matrix4 *)translationMatrixWithX:(float)x y:(float)y z:(float)z;
 
 @end

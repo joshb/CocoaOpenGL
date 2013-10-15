@@ -25,9 +25,11 @@
 
 #import <AppKit/AppKit.h>
 
+@class Matrix4;
+
 @interface MyNSOpenGLView : NSOpenGLView
 
-@property (readonly) const float *projectionMatrix;
+@property (readonly) Matrix4 *projectionMatrix;
 
 - (void)flush;
 
