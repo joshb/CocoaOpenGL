@@ -27,11 +27,14 @@
 
 @interface Matrix4 : NSObject
 
+- (id)initWithData:(const float *)data;
 - (const float *)data;
 - (float)getValueForIndex:(int)index;
 - (void)setValue:(float)value forIndex:(int)index;
+- (Matrix4 *)multiplyWithMatrix:(Matrix4 *)matrix;
 
 + (Matrix4 *)perspectiveMatrixWithFieldOfView:(float)fov aspect:(float)aspect near:(float)near far:(float)far;
 + (Matrix4 *)translationMatrixWithX:(float)x y:(float)y z:(float)z;
++ (Matrix4 *)rotationMatrixWithAngle:(float)angle x:(float)x y:(float)y z:(float)z;
 
 @end

@@ -43,6 +43,7 @@
 	GLint _programLightColorLocation;
 	GLint _programFragmentColorLocation;
 
+    GLfloat _cameraRotation;
 	GLfloat _cameraPosition[3];
 	
 	float _lightPosition[NUM_LIGHTS * 3];
@@ -100,17 +101,15 @@
 
 	// do the first cycle to initialize positions
 	_lightRotation = 0.0f;
+    _cameraRotation = 0.0f;
 	[self cycle];
-
-	// setup camera
-	_cameraPosition[0] = 0.0f;
-	_cameraPosition[1] = 0.0f;
-	_cameraPosition[2] = 4.0f;
 }
 
 - (void)renderWithProjectionMatrix:(Matrix4 *)projectionMatrix
 {
-    Matrix4 *modelviewMatrix = [Matrix4 translationMatrixWithX:-_cameraPosition[0] y:-_cameraPosition[1] z:-_cameraPosition[2]];
+    Matrix4 *translationMatrix = [Matrix4 translationMatrixWithX:-_cameraPosition[0] y:-_cameraPosition[1] z:-_cameraPosition[2]];
+    Matrix4 *rotationMatrix = [Matrix4 rotationMatrixWithAngle:_cameraRotation x:0.0f y:-1.0f z:0.0f];
+    Matrix4 *modelviewMatrix = [rotationMatrix multiplyWithMatrix:translationMatrix];
 
 	// enable the program and set uniform variables
 	[_program useProgram];
@@ -162,6 +161,11 @@ getTicks(void)
 		_lightPosition[i * 3 + 1] = cosf(r) * sinf(r);
 		_lightPosition[i * 3 + 2] = sinf(r) * radius;
 	}
+    
+    _cameraRotation -= (M_PI / 16.0f) * secondsElapsed;
+    _cameraPosition[0] = sinf(_cameraRotation) * 4.0f;
+    _cameraPosition[1] = 0.0f;
+    _cameraPosition[2] = cosf(_cameraRotation) * 4.0f;
 }
 
 @end
