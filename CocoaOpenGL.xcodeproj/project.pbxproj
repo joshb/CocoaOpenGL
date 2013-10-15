@@ -22,6 +22,7 @@
 		0D4A680D151D190500CE2D59 /* normalmap.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D4A680C151D190500CE2D59 /* normalmap.png */; };
 		0D514248151B7D48007F9282 /* Texture.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D514247151B7D48007F9282 /* Texture.m */; };
 		0DF5F618180CD97500CCD6CD /* Cylinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DF5F617180CD97500CCD6CD /* Cylinder.m */; };
+		0DF5F61B180CE35F00CCD6CD /* ShaderProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DF5F61A180CE35F00CCD6CD /* ShaderProgram.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +52,8 @@
 		0D514247151B7D48007F9282 /* Texture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Texture.m; sourceTree = "<group>"; };
 		0DF5F616180CD97500CCD6CD /* Cylinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cylinder.h; sourceTree = "<group>"; };
 		0DF5F617180CD97500CCD6CD /* Cylinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cylinder.m; sourceTree = "<group>"; };
+		0DF5F619180CE35F00CCD6CD /* ShaderProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderProgram.h; sourceTree = "<group>"; };
+		0DF5F61A180CE35F00CCD6CD /* ShaderProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShaderProgram.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +137,8 @@
 				0D514247151B7D48007F9282 /* Texture.m */,
 				0DF5F616180CD97500CCD6CD /* Cylinder.h */,
 				0DF5F617180CD97500CCD6CD /* Cylinder.m */,
+				0DF5F619180CE35F00CCD6CD /* ShaderProgram.h */,
+				0DF5F61A180CE35F00CCD6CD /* ShaderProgram.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -205,6 +210,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0D2D258E149A788F00655F4F /* main.m in Sources */,
+				0DF5F61B180CE35F00CCD6CD /* ShaderProgram.m in Sources */,
 				0DF5F618180CD97500CCD6CD /* Cylinder.m in Sources */,
 				0D2D2595149A788F00655F4F /* CocoaOpenGLAppDelegate.m in Sources */,
 				0D2D25A3149A7E1F00655F4F /* shader.c in Sources */,

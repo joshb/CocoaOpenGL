@@ -25,11 +25,13 @@
 
 #import <Foundation/Foundation.h>
 
-@class ShaderProgram;
+@interface ShaderProgram : NSObject
 
-@interface Cylinder : NSObject
-
-- (id)initWithProgram:(ShaderProgram *)program andNumberOfDivisions:(unsigned int)divisions;
-- (void)render;
+- (void)attachShaderWithType:(GLenum)type
+                    fromFile:(NSString *)filePath;
+- (void)linkProgram;
+- (void)useProgram;
+- (GLint)getLocationOfAttributeWithName:(NSString *)name;
+- (GLint)getLocationOfUniformWithName:(NSString *)name;
 
 @end

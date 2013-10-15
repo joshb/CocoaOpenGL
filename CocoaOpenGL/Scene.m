@@ -27,16 +27,14 @@
 #include <sys/time.h>
 #import "Scene.h"
 #import "Cylinder.h"
-
-/* shader functions defined in shader.c */
-extern void shaderAttachFromFile(GLuint, GLenum, const char *);
+#import "ShaderProgram.h"
 
 @interface Scene()
 {
 	Texture *_normalmap;
     Cylinder *_cylinder;
 
-	GLuint _program;
+	ShaderProgram *_program;
 	GLint _programProjectionMatrixLocation;
 	GLint _programModelviewMatrixLocation;
 	GLint _programCameraPositionLocation;
@@ -67,53 +65,31 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 
 - (void)dealloc
 {
-	glDeleteProgram(_program);
+    [_program release];
 	[_normalmap release];
     [_cylinder release];
 	[super dealloc];
 }
 
 - (void)sceneInit
-{
-	GLint result;
-	
-	/* load normalmap texture */
+{	
+	// load normalmap texture
 	_normalmap = [[Texture alloc] initFromFile:@"normalmap.png"];
 
-	/* create program object and attach shaders */
-	_program = glCreateProgram();
-	[self attachShaderToProgram:_program withType:GL_VERTEX_SHADER fromFile:@"shader.vp"];
-	[self attachShaderToProgram:_program withType:GL_FRAGMENT_SHADER fromFile:@"shader.fp"];
+	// create the program, attach shaders, and link the program */
+    _program = [[ShaderProgram alloc] init];
+	[_program attachShaderWithType:GL_VERTEX_SHADER fromFile:@"shader.vp"];
+	[_program attachShaderWithType:GL_FRAGMENT_SHADER fromFile:@"shader.fp"];
+    [_program linkProgram];
 
-	/* link the program and make sure that there were no errors */
-	glLinkProgram(_program);
-	glGetProgramiv(_program, GL_LINK_STATUS, &result);
-	if(result == GL_FALSE) {
-		GLint length;
-		char *log;
+	// get uniform locations
+	_programProjectionMatrixLocation = [_program getLocationOfUniformWithName:@"projectionMatrix"];
+	_programModelviewMatrixLocation = [_program getLocationOfUniformWithName:@"modelviewMatrix"];
+	_programCameraPositionLocation = [_program getLocationOfUniformWithName:@"cameraPosition"];
+	_programLightPositionLocation = [_program getLocationOfUniformWithName:@"lightPosition"];
+	_programLightColorLocation = [_program getLocationOfUniformWithName:@"lightColor"];
 
-		/* get the program info log */
-		glGetProgramiv(_program, GL_INFO_LOG_LENGTH, &length);
-		log = malloc(length);
-		glGetProgramInfoLog(_program, length, &result, log);
-
-		/* print an error message and the info log */
-		fprintf(stderr, "sceneInit(): Program linking failed: %s\n", log);
-		free(log);
-
-		/* delete the program */
-		glDeleteProgram(_program);
-		_program = 0;
-	}
-
-	/* get uniform locations */
-	_programProjectionMatrixLocation = glGetUniformLocation(_program, "projectionMatrix");
-	_programModelviewMatrixLocation = glGetUniformLocation(_program, "modelviewMatrix");
-	_programCameraPositionLocation = glGetUniformLocation(_program, "cameraPosition");
-	_programLightPositionLocation = glGetUniformLocation(_program, "lightPosition");
-	_programLightColorLocation = glGetUniformLocation(_program, "lightColor");
-
-	/* set up red/green/blue lights */
+	// set up red/green/blue lights
 	_lightColor[0] = 1.0f; _lightColor[1] = 0.0f; _lightColor[2] = 0.0f;
 	_lightColor[3] = 0.0f; _lightColor[4] = 1.0f; _lightColor[5] = 0.0f;
 	_lightColor[6] = 0.0f; _lightColor[7] = 0.0f; _lightColor[8] = 1.0f;
@@ -121,27 +97,19 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 	// create the cylinder
     _cylinder = [[Cylinder alloc] initWithProgram:_program andNumberOfDivisions:36];
 
-	/* do the first cycle to initialize positions */
+	// do the first cycle to initialize positions
 	_lightRotation = 0.0f;
 	[self cycle];
 
-	/* setup camera */
+	// setup camera
 	_cameraPosition[0] = 0.0f;
 	_cameraPosition[1] = 0.0f;
 	_cameraPosition[2] = 4.0f;
 }
 
-- (void)attachShaderToProgram:(GLuint)program withType:(GLenum)type
-	fromFile:(NSString *)filePath
-{
-	NSString *fullPath = [[[[NSBundle mainBundle] resourcePath]
-		stringByAppendingString:@"/"] stringByAppendingString:filePath];
-	shaderAttachFromFile(program, type, [fullPath UTF8String]);
-}
-
 - (void)renderWithProjectionMatrix:(const float *)projectionMatrix
 {
-	/* create modelview matrix */
+	// create modelview matrix
 	float modelviewMatrix[16];
 	for(int i = 0; i < 4; ++i) {
 		for(int j = 0; j < 4; ++j)
@@ -151,18 +119,18 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 	modelviewMatrix[13] = -_cameraPosition[1];
 	modelviewMatrix[14] = -_cameraPosition[2];
 
-	/* enable program and set uniform variables */
-	glUseProgram(_program);
+	// enable the program and set uniform variables
+	[_program useProgram];
 	glUniformMatrix4fv(_programProjectionMatrixLocation, 1, GL_FALSE, projectionMatrix);
 	glUniformMatrix4fv(_programModelviewMatrixLocation, 1, GL_FALSE, modelviewMatrix);
 	glUniform3fv(_programCameraPositionLocation, 1, _cameraPosition);
 	glUniform3fv(_programLightPositionLocation, NUM_LIGHTS, _lightPosition);
 	glUniform3fv(_programLightColorLocation, NUM_LIGHTS, _lightColor);
 
-	/* render the cylinder */
+	// render the cylinder
     [_cylinder render];
 
-	/* disable program */
+	// disable the program
 	glUseProgram(0);
 }
 
@@ -183,15 +151,15 @@ getTicks(void)
 	float secondsElapsed;
 	int i;
 
-	/* calculate the number of seconds that have
-	 * passed since the last call to this function */
+	// calculate the number of seconds that have
+    // passed since the last call to this function
 	if(prevTicks == 0)
 		prevTicks = getTicks();
 	ticks = getTicks();
 	secondsElapsed = (float)(ticks - prevTicks) / 1000.0f;
 	prevTicks = ticks;
 
-	/* update the light positions */
+	// update the light positions
 	_lightRotation += (M_PI / 4.0f) * secondsElapsed;
 	for(i = 0; i < NUM_LIGHTS; ++i) {
 		const float radius = 1.75f;

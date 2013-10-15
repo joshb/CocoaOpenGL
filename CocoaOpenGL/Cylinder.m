@@ -24,6 +24,7 @@
  */
 
 #import "Cylinder.h"
+#import "ShaderProgram.h"
 
 @interface Cylinder()
 {
@@ -36,7 +37,7 @@
 
 @implementation Cylinder
 
-- (id)initWithProgram:(GLuint)program andNumberOfDivisions:(unsigned int)divisions
+- (id)initWithProgram:(ShaderProgram *)program andNumberOfDivisions:(unsigned int)divisions
 {
     if((self = [super init])) {
         unsigned int i, size, tcSize;
@@ -104,11 +105,11 @@
         }
         
         // get the program's vertex data locations
-        GLint programVertexPositionLocation = glGetAttribLocation(program, "vertexPosition");
-        GLint programVertexTexCoordsLocation = glGetAttribLocation(program, "vertexTexCoords");
-        GLint programVertexTangentLocation = glGetAttribLocation(program, "vertexTangent");
-        GLint programVertexBitangentLocation = glGetAttribLocation(program, "vertexBitangent");
-        GLint programVertexNormalLocation = glGetAttribLocation(program, "vertexNormal");
+        GLint programVertexPositionLocation = [program getLocationOfAttributeWithName:@"vertexPosition"];
+        GLint programVertexTexCoordsLocation = [program getLocationOfAttributeWithName:@"vertexTexCoords"];
+        GLint programVertexTangentLocation = [program getLocationOfAttributeWithName:@"vertexTangent"];
+        GLint programVertexBitangentLocation = [program getLocationOfAttributeWithName:@"vertexBitangent"];
+        GLint programVertexNormalLocation = [program getLocationOfAttributeWithName:@"vertexNormal"];
         
         // create vertex array
         glGenVertexArrays(1, &_vertexArrayId);
