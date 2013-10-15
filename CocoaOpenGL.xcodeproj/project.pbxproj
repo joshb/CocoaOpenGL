@@ -21,6 +21,7 @@
 		0D412973149FA6410036EDC9 /* Scene.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D412972149FA6410036EDC9 /* Scene.m */; };
 		0D4A680D151D190500CE2D59 /* normalmap.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D4A680C151D190500CE2D59 /* normalmap.png */; };
 		0D514248151B7D48007F9282 /* Texture.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D514247151B7D48007F9282 /* Texture.m */; };
+		0DF5F618180CD97500CCD6CD /* Cylinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DF5F617180CD97500CCD6CD /* Cylinder.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,8 @@
 		0D4A680C151D190500CE2D59 /* normalmap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = normalmap.png; sourceTree = "<group>"; };
 		0D514246151B7D48007F9282 /* Texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
 		0D514247151B7D48007F9282 /* Texture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Texture.m; sourceTree = "<group>"; };
+		0DF5F616180CD97500CCD6CD /* Cylinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cylinder.h; sourceTree = "<group>"; };
+		0DF5F617180CD97500CCD6CD /* Cylinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cylinder.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +132,8 @@
 				0D412972149FA6410036EDC9 /* Scene.m */,
 				0D514246151B7D48007F9282 /* Texture.h */,
 				0D514247151B7D48007F9282 /* Texture.m */,
+				0DF5F616180CD97500CCD6CD /* Cylinder.h */,
+				0DF5F617180CD97500CCD6CD /* Cylinder.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -200,6 +205,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0D2D258E149A788F00655F4F /* main.m in Sources */,
+				0DF5F618180CD97500CCD6CD /* Cylinder.m in Sources */,
 				0D2D2595149A788F00655F4F /* CocoaOpenGLAppDelegate.m in Sources */,
 				0D2D25A3149A7E1F00655F4F /* shader.c in Sources */,
 				0D2D25AA149A83CF00655F4F /* MyNSOpenGLView.m in Sources */,
