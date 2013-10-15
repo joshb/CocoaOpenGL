@@ -28,6 +28,7 @@
 #import "Scene.h"
 #import "Cylinder.h"
 #import "ShaderProgram.h"
+#import "Matrix4.h"
 
 @interface Scene()
 {
@@ -109,20 +110,12 @@
 
 - (void)renderWithProjectionMatrix:(const float *)projectionMatrix
 {
-	// create modelview matrix
-	float modelviewMatrix[16];
-	for(int i = 0; i < 4; ++i) {
-		for(int j = 0; j < 4; ++j)
-			modelviewMatrix[i * 4 + j] = (i == j) ? 1.0f : 0.0f;
-	}
-	modelviewMatrix[12] = -_cameraPosition[0];
-	modelviewMatrix[13] = -_cameraPosition[1];
-	modelviewMatrix[14] = -_cameraPosition[2];
+    Matrix4 *modelviewMatrix = [Matrix4 translationMatrixWithX:-_cameraPosition[0] y:-_cameraPosition[1] z:-_cameraPosition[2]];
 
 	// enable the program and set uniform variables
 	[_program useProgram];
 	glUniformMatrix4fv(_programProjectionMatrixLocation, 1, GL_FALSE, projectionMatrix);
-	glUniformMatrix4fv(_programModelviewMatrixLocation, 1, GL_FALSE, modelviewMatrix);
+	glUniformMatrix4fv(_programModelviewMatrixLocation, 1, GL_FALSE, modelviewMatrix.data);
 	glUniform3fv(_programCameraPositionLocation, 1, _cameraPosition);
 	glUniform3fv(_programLightPositionLocation, NUM_LIGHTS, _lightPosition);
 	glUniform3fv(_programLightColorLocation, NUM_LIGHTS, _lightColor);
