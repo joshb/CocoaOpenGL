@@ -30,6 +30,7 @@
 @interface MyNSOpenGLView()
 {
 	Matrix4 *_projectionMatrix;
+    NSTrackingArea *_trackingArea;
 }
 
 @end
@@ -72,6 +73,16 @@
 	
     // create projection matrix
     _projectionMatrix = [[Matrix4 perspectiveMatrixWithFieldOfView:((float)M_PI / 4.0f) aspect:((float)frame.size.width / (float)frame.size.height) near:0.1f far:200.0f] retain];
+    
+    // remove existing tracking area if necessary
+    if(_trackingArea != nil) {
+        [self removeTrackingArea:_trackingArea];
+        [_trackingArea release];
+    }
+	
+    // create new tracking area
+    _trackingArea = [[NSTrackingArea alloc] initWithRect:[self frame] options:NSTrackingMouseMoved|NSTrackingActiveWhenFirstResponder owner:self userInfo:nil];
+    [self addTrackingArea:_trackingArea];
 }
 
 - (BOOL)acceptsFirstResponder
