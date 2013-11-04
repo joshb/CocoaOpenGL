@@ -137,7 +137,6 @@ loadImage(const char *filePath)
 - (void)dealloc
 {
 	glDeleteTextures(1, &_textureId);
-	[super dealloc];
 }
 
 @end

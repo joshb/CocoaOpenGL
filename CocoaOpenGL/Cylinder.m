@@ -177,7 +177,6 @@
 {
     glDeleteBuffers(5, _bufferIds);
     glDeleteVertexArrays(1, &_vertexArrayId);
-    [super dealloc];
 }
 
 @end

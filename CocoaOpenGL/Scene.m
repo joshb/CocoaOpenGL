@@ -65,14 +65,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [_program release];
-	[_normalmap release];
-    [_cylinder release];
-	[super dealloc];
-}
-
 - (void)sceneInit
 {	
 	// load normalmap texture

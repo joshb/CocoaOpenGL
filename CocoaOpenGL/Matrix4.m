@@ -106,7 +106,7 @@
     m[14] = m1[12]*m2[ 2] + m1[13]*m2[ 6] + m1[14]*m2[10] + m1[15]*m2[14];
     m[15] = m1[12]*m2[ 3] + m1[13]*m2[ 7] + m1[14]*m2[11] + m1[15]*m2[15];
     
-    return [[[Matrix4 alloc] initWithData:m] autorelease];
+    return [[Matrix4 alloc] initWithData:m];
 }
 
 + (Matrix4 *)perspectiveMatrixWithFieldOfView:(float)fov aspect:(float)aspect near:(float)near far:(float)far
@@ -121,7 +121,7 @@
     [matrix setValue:((2.0f * far * near) / (near - far)) forIndex:14];
     [matrix setValue:0.0f forIndex:15];
     
-    return [matrix autorelease];
+    return matrix;
 }
 
 + (Matrix4 *)translationMatrixWithX:(float)x y:(float)y z:(float)z
@@ -130,7 +130,7 @@
     [matrix setValue:x forIndex:12];
     [matrix setValue:y forIndex:13];
     [matrix setValue:z forIndex:14];
-    return [matrix autorelease];
+    return matrix;
 }
 
 + (Matrix4 *)rotationMatrixWithAngle:(float)angle x:(float)x y:(float)y z:(float)z
@@ -158,7 +158,7 @@
     [matrix setValue:(yz - xs) forIndex:9];
     [matrix setValue:(z * z * ci + c) forIndex:10];
  
-    return [matrix autorelease];
+    return matrix;
 }
 
 @end

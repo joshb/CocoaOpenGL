@@ -65,11 +65,6 @@
 	[[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSDefaultRunLoopMode];
 }
 
-- (void)applicationWillTerminate:(NSNotification *)notification
-{
-	[_scene release];
-}
-
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
 {
 	return YES;

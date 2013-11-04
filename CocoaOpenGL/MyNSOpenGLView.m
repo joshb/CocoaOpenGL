@@ -57,11 +57,9 @@
 		initWithAttributes:attr];
 	NSOpenGLContext *context = [[NSOpenGLContext alloc] initWithFormat:format
 		shareContext:nil];
-	[format release];
 
 	[self setOpenGLContext:context];
-	[context release];
-	[[self openGLContext] makeCurrentContext];
+	[self.openGLContext makeCurrentContext];
 }
 
 - (void)reshape
@@ -72,13 +70,11 @@
 	glViewport(0, 0, (GLsizei)frame.size.width, (GLsizei)frame.size.height);
 	
     // create projection matrix
-    _projectionMatrix = [[Matrix4 perspectiveMatrixWithFieldOfView:((float)M_PI / 4.0f) aspect:((float)frame.size.width / (float)frame.size.height) near:0.1f far:200.0f] retain];
+    _projectionMatrix = [Matrix4 perspectiveMatrixWithFieldOfView:((float)M_PI / 4.0f) aspect:((float)frame.size.width / (float)frame.size.height) near:0.1f far:200.0f];
     
     // remove existing tracking area if necessary
-    if(_trackingArea != nil) {
+    if(_trackingArea != nil)
         [self removeTrackingArea:_trackingArea];
-        [_trackingArea release];
-    }
 	
     // create new tracking area
     _trackingArea = [[NSTrackingArea alloc] initWithRect:[self frame] options:NSTrackingMouseMoved|NSTrackingActiveWhenFirstResponder owner:self userInfo:nil];

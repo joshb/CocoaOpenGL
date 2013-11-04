@@ -100,7 +100,6 @@ extern void shaderAttachFromFile(GLuint, GLenum, const char *);
 - (void)dealloc
 {
     glDeleteProgram(_program);
-    [super dealloc];
 }
 
 @end
