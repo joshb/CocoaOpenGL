@@ -90,6 +90,7 @@
 {
 	switch(theEvent.keyCode) {
 		default:
+			[self.inputHandler keyDown:theEvent];
 			break;
 		case 0x35: // escape
 			[self.window close];

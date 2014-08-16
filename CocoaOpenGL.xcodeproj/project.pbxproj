@@ -22,6 +22,7 @@
 		0D4A680D151D190500CE2D59 /* normalmap.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D4A680C151D190500CE2D59 /* normalmap.png */; };
 		0D514248151B7D48007F9282 /* Texture.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D514247151B7D48007F9282 /* Texture.m */; };
 		0DDB6701180D016D00F57BCE /* Matrix4.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DDB6700180D016D00F57BCE /* Matrix4.m */; };
+		0DE4DEB4199ED441004E2E8E /* Sphere.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DE4DEB3199ED441004E2E8E /* Sphere.m */; };
 		0DF5F618180CD97500CCD6CD /* Cylinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DF5F617180CD97500CCD6CD /* Cylinder.m */; };
 		0DF5F61B180CE35F00CCD6CD /* ShaderProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DF5F61A180CE35F00CCD6CD /* ShaderProgram.m */; };
 /* End PBXBuildFile section */
@@ -53,6 +54,10 @@
 		0D514247151B7D48007F9282 /* Texture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Texture.m; sourceTree = "<group>"; };
 		0DDB66FF180D016D00F57BCE /* Matrix4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Matrix4.h; sourceTree = "<group>"; };
 		0DDB6700180D016D00F57BCE /* Matrix4.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Matrix4.m; sourceTree = "<group>"; };
+		0DE4DEB2199ED441004E2E8E /* Sphere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sphere.h; sourceTree = "<group>"; };
+		0DE4DEB3199ED441004E2E8E /* Sphere.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sphere.m; sourceTree = "<group>"; };
+		0DE4DEB5199EDB4E004E2E8E /* Renderable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Renderable.h; sourceTree = "<group>"; };
+		0DE4DEB6199EDF72004E2E8E /* InputHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InputHandler.h; sourceTree = "<group>"; };
 		0DF5F616180CD97500CCD6CD /* Cylinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cylinder.h; sourceTree = "<group>"; };
 		0DF5F617180CD97500CCD6CD /* Cylinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cylinder.m; sourceTree = "<group>"; };
 		0DF5F619180CE35F00CCD6CD /* ShaderProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderProgram.h; sourceTree = "<group>"; };
@@ -112,6 +117,7 @@
 		0D2D2587149A788F00655F4F /* CocoaOpenGL */ = {
 			isa = PBXGroup;
 			children = (
+				0DE4DEB6199EDF72004E2E8E /* InputHandler.h */,
 				0D2D2593149A788F00655F4F /* CocoaOpenGLAppDelegate.h */,
 				0D2D2594149A788F00655F4F /* CocoaOpenGLAppDelegate.m */,
 				0D2D2596149A788F00655F4F /* MainMenu.xib */,
@@ -138,8 +144,11 @@
 				0D412972149FA6410036EDC9 /* Scene.m */,
 				0D514246151B7D48007F9282 /* Texture.h */,
 				0D514247151B7D48007F9282 /* Texture.m */,
+				0DE4DEB5199EDB4E004E2E8E /* Renderable.h */,
 				0DF5F616180CD97500CCD6CD /* Cylinder.h */,
 				0DF5F617180CD97500CCD6CD /* Cylinder.m */,
+				0DE4DEB2199ED441004E2E8E /* Sphere.h */,
+				0DE4DEB3199ED441004E2E8E /* Sphere.m */,
 				0DF5F619180CE35F00CCD6CD /* ShaderProgram.h */,
 				0DF5F61A180CE35F00CCD6CD /* ShaderProgram.m */,
 				0DDB66FF180D016D00F57BCE /* Matrix4.h */,
@@ -174,7 +183,7 @@
 		0D2D2574149A788F00655F4F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0600;
 			};
 			buildConfigurationList = 0D2D2577149A788F00655F4F /* Build configuration list for PBXProject "CocoaOpenGL" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -222,6 +231,7 @@
 				0D2D25AA149A83CF00655F4F /* MyNSOpenGLView.m in Sources */,
 				0D412973149FA6410036EDC9 /* Scene.m in Sources */,
 				0DDB6701180D016D00F57BCE /* Matrix4.m in Sources */,
+				0DE4DEB4199ED441004E2E8E /* Sphere.m in Sources */,
 				0D514248151B7D48007F9282 /* Texture.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -266,8 +276,10 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -301,9 +313,11 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;

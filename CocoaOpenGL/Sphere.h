@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Josh A. Beam
+ * Copyright (C) 2011-2014 Josh A. Beam
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,7 +28,7 @@
 
 @class ShaderProgram;
 
-@interface Cylinder : NSObject <Renderable>
+@interface Sphere : NSObject <Renderable>
 
 - (id)initWithProgram:(ShaderProgram *)program andNumberOfDivisions:(unsigned int)divisions;
 - (void)render;

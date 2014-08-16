@@ -27,13 +27,15 @@
 #include <sys/time.h>
 #import "Scene.h"
 #import "Cylinder.h"
+#import "Sphere.h"
 #import "ShaderProgram.h"
 #import "Matrix4.h"
+#import "Renderable.h"
 
 @interface Scene()
 {
 	Texture *_normalmap;
-    Cylinder *_cylinder;
+	NSObject <Renderable> *_renderable;
 
 	ShaderProgram *_program;
 	GLint _programProjectionMatrixLocation;
@@ -43,12 +45,14 @@
 	GLint _programLightColorLocation;
 	GLint _programFragmentColorLocation;
 
-    GLfloat _cameraRotation;
+	GLfloat _cameraRotation;
 	GLfloat _cameraPosition[3];
 	
 	float _lightPosition[NUM_LIGHTS * 3];
 	float _lightColor[NUM_LIGHTS * 3];
 	float _lightRotation;
+
+	BOOL _showCylinder;
 }
 
 @end
@@ -57,12 +61,12 @@
 
 - (id)init
 {
-    self = [super init];
-    if (self) {
+	self = [super init];
+	if (self) {
 		[self sceneInit];
-    }
-    
-    return self;
+	}
+
+	return self;
 }
 
 - (void)sceneInit
@@ -71,10 +75,10 @@
 	_normalmap = [[Texture alloc] initFromFile:@"normalmap.png"];
 
 	// create the program, attach shaders, and link the program */
-    _program = [[ShaderProgram alloc] init];
+	_program = [[ShaderProgram alloc] init];
 	[_program attachShaderWithType:GL_VERTEX_SHADER fromFile:@"shader.vp"];
 	[_program attachShaderWithType:GL_FRAGMENT_SHADER fromFile:@"shader.fp"];
-    [_program linkProgram];
+	[_program linkProgram];
 
 	// get uniform locations
 	_programProjectionMatrixLocation = [_program getLocationOfUniformWithName:@"projectionMatrix"];
@@ -89,19 +93,19 @@
 	_lightColor[6] = 0.0f; _lightColor[7] = 0.0f; _lightColor[8] = 1.0f;
 
 	// create the cylinder
-    _cylinder = [[Cylinder alloc] initWithProgram:_program andNumberOfDivisions:36];
+	[self toggleRenderable];
 
 	// do the first cycle to initialize positions
 	_lightRotation = 0.0f;
-    _cameraRotation = 0.0f;
+	_cameraRotation = 0.0f;
 	[self cycle];
 }
 
 - (void)renderWithProjectionMatrix:(Matrix4 *)projectionMatrix
 {
-    Matrix4 *translationMatrix = [Matrix4 translationMatrixWithX:-_cameraPosition[0] y:-_cameraPosition[1] z:-_cameraPosition[2]];
-    Matrix4 *rotationMatrix = [Matrix4 rotationMatrixWithAngle:_cameraRotation x:0.0f y:-1.0f z:0.0f];
-    Matrix4 *modelviewMatrix = [rotationMatrix multiplyWithMatrix:translationMatrix];
+	Matrix4 *translationMatrix = [Matrix4 translationMatrixWithX:-_cameraPosition[0] y:-_cameraPosition[1] z:-_cameraPosition[2]];
+	Matrix4 *rotationMatrix = [Matrix4 rotationMatrixWithAngle:_cameraRotation x:0.0f y:-1.0f z:0.0f];
+	Matrix4 *modelviewMatrix = [rotationMatrix multiplyWithMatrix:translationMatrix];
 
 	// enable the program and set uniform variables
 	[_program useProgram];
@@ -111,8 +115,8 @@
 	glUniform3fv(_programLightPositionLocation, NUM_LIGHTS, _lightPosition);
 	glUniform3fv(_programLightColorLocation, NUM_LIGHTS, _lightColor);
 
-	// render the cylinder
-    [_cylinder render];
+	// render the object
+	[_renderable render];
 
 	// disable the program
 	glUseProgram(0);
@@ -136,7 +140,7 @@ getTicks(void)
 	int i;
 
 	// calculate the number of seconds that have
-    // passed since the last call to this function
+	// passed since the last call to this function
 	if(prevTicks == 0)
 		prevTicks = getTicks();
 	ticks = getTicks();
@@ -153,11 +157,23 @@ getTicks(void)
 		_lightPosition[i * 3 + 1] = cosf(r) * sinf(r);
 		_lightPosition[i * 3 + 2] = sinf(r) * radius;
 	}
-    
-    _cameraRotation -= (M_PI / 16.0f) * secondsElapsed;
-    _cameraPosition[0] = sinf(_cameraRotation) * 4.0f;
-    _cameraPosition[1] = 0.0f;
-    _cameraPosition[2] = cosf(_cameraRotation) * 4.0f;
+
+	_cameraRotation -= (M_PI / 16.0f) * secondsElapsed;
+	_cameraPosition[0] = sinf(_cameraRotation) * 4.0f;
+	_cameraPosition[1] = 0.0f;
+	_cameraPosition[2] = cosf(_cameraRotation) * 4.0f;
+}
+
+- (void)toggleRenderable
+{
+	const unsigned int divisions = 36;
+
+	_showCylinder = !_showCylinder;
+
+	if(_showCylinder)
+		_renderable = [[Cylinder alloc] initWithProgram:_program andNumberOfDivisions:divisions];
+	else
+		_renderable = [[Sphere alloc] initWithProgram:_program andNumberOfDivisions:divisions];
 }
 
 @end

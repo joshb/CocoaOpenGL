@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Josh A. Beam
+ * Copyright (C) 2014 Josh A. Beam
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -24,13 +24,9 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "Renderable.h"
 
-@class ShaderProgram;
+@protocol Renderable <NSObject>
 
-@interface Cylinder : NSObject <Renderable>
-
-- (id)initWithProgram:(ShaderProgram *)program andNumberOfDivisions:(unsigned int)divisions;
 - (void)render;
 
 @end

@@ -25,8 +25,9 @@
 
 #import <Cocoa/Cocoa.h>
 #import "MyNSOpenGLView.h"
+#import "InputHandler.h"
 
-@interface CocoaOpenGLAppDelegate : NSObject <NSApplicationDelegate>
+@interface CocoaOpenGLAppDelegate : NSObject <NSApplicationDelegate, InputHandler>
 
 @property (assign) IBOutlet NSWindow *window;
 @property (assign) IBOutlet MyNSOpenGLView *view;

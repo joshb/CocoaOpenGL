@@ -24,12 +24,14 @@
  */
 
 #import <AppKit/AppKit.h>
+#import "InputHandler.h"
 
 @class Matrix4;
 
 @interface MyNSOpenGLView : NSOpenGLView
 
 @property (readonly) Matrix4 *projectionMatrix;
+@property (assign) NSObject <InputHandler> *inputHandler;
 
 - (void)flush;
 

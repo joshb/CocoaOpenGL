@@ -34,5 +34,6 @@
 
 - (void)renderWithProjectionMatrix:(Matrix4 *)projectionMatrix;
 - (void)cycle;
+- (void)toggleRenderable;
 
 @end
