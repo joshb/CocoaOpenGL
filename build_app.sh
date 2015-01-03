@@ -37,7 +37,7 @@ mkdir -p $CONTENTS/MacOS
 mkdir -p $EN_LPROJ
 
 # create PkgInfo and Info.plist
-echo "APPL????" > $CONTENTS/PkgInfo
+/bin/echo -n "APPL????" > $CONTENTS/PkgInfo
 cat << EOF > $CONTENTS/Info.plist
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
